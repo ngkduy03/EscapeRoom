@@ -1,0 +1,63 @@
+# =============== #
+# Unity generated #
+# =============== #
+Temp/
+Obj/
+UnityGenerated/
+Library/
+UserSettings/
+Assets/AssetStoreTools*
+*.log
+ProjectSettings/EditorUserSettings.asset
+
+# ===================================== #
+# Visual Studio / MonoDevelop generated #
+# ===================================== #
+ExportedObj/
+*.svd
+*.userprefs
+*.csproj
+*.pidb
+*.suo
+*.user
+*.unityproj
+*.booproj
+.vs
+.vsconfig
+.vscode
+
+# Ignore sln files by default, remove this directive if more advanced setup is required.
+*.sln
+
+# ============ #
+# OS generated #
+# ============ #
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ===================================================================================== #
+# UserWorkspace is private folder for user. Its containment is ignored by project repo.
+# It is useful to store tools and editor extension which is convenient 
+# for you but could be inconvenient or not required for other contributors.
+# ===================================================================================== #
+!src/*/Assets/UserWorkspace
+src/*/Assets/UserWorkspace/*
+!src/*/Assets/UserWorkspace/.gitkeep
+
+# ================= #
+# Exlude docs build #
+# ================= #
+/docs/build
+
+# ================= #
+# Exlude builds     #
+# ================= #
+/src/*/Build
+/scripts/CI/invoke.yaml
+/src/*/UserSettings
+/vscode

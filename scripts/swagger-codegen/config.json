@@ -1,0 +1,5 @@
+{
+  "packageName": "EscapeRoom.API",
+  "packageVersion": "1.0.0",
+  "apiModelsPath": "EscapeRoom/Api/Models/"
+}
