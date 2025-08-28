@@ -1,0 +1,50 @@
+CLOUD 9 SPACE STATION MODULAR KIT DOCUMENTATION
+
+Contents -
+
+1. Description
+2. Assets Included
+3. Set-Up If Errors Occur
+4. THANK YOU
+
+_________________________________________________________________
+
+1 - Description
+
+Cloud 9 is a space station interior modular asset kit with a variety of walls, floors, ceilings & functional props to create
+your own sci-fi station environment for games & animations.
+
+_________________________________________________________________
+
+2 - Assets Included
+
+There are a multitude of walls including Bottom(B), Middle(M) &
+Top(T). These can be kit-bashed to create a large variety of wall
+types, then saved as prefabs for easy placement & duplication.
+
+There are varieties of ceilings & floors to fill spaces dependant on required sizes.
+
+All asset will snap together on the grid by 1m intervals, the door prop requires 0.5m snapping to fit correctly in the Doorway asset.
+
+Some props are included to fill space and break up repetition, such as the Utility Boxes & Fan.
+
+The Door, Teleporter & Fan have pre-made animations which have their action trees set up for use in the Animator window.
+
+P_SDBox also includes a P_SDTube counter part that can be inserted into the box for "activation" uses (SD = Self Destruct)
+
+_________________________________________________________________
+
+3 - Set-Up If Errors Occur
+
+During validation of this asset it is noted the materials shaders were showing an internal error, all materials in this package use the URP Lit shader, with "Glass" materials using the "Transparent" Rendering Mode, to create the window like effect & all smoothness should adjusted for the desired reflection effects.
+
+All Prefabs in the "Prefab" folder (minus "Presets") will require their X Rotation to be set to -90 as their axes orientation could not be saved as such for the upload of this package.
+
+_________________________________________________________________
+
+4 - THANK YOU
+
+Thank you so much for choosing to purchase and use this asset in your project, this is my first asset release, so ratings and feedback is highly appreciated for improvements on this and future packages I may release.
+
+Kind Regards,
+OptiPol_Inc
