@@ -15,10 +15,10 @@ MonoBehaviour:
   <MaxWalkSpeed>k__BackingField: 1.5
   <MaxSprintSpeed>k__BackingField: 2.7
   <WalkAnimValue>k__BackingField: 0.5
-  <RunAnimValue>k__BackingField: 1
+  <SprintAnimValue>k__BackingField: 1
   <SpeedAccel>k__BackingField: 0.1
   <RotateSpeed>k__BackingField: 10
-  <AnimSpeedAccel>k__BackingField: 0.01
+  <AnimSpeedAccel>k__BackingField: 0.008
   <JumpForce>k__BackingField: 1.5
   <BreakForce>k__BackingField: 0.2
   <GravityForce>k__BackingField: -9.81

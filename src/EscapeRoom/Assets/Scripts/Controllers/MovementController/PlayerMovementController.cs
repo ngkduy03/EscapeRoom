@@ -70,7 +70,6 @@ public class PlayerMovementController : ControllerBase, IMovementController
 
                 walkSpeed = Mathf.Clamp(walkSpeed, 0, playerSetting.MaxSprintSpeed);
                 walkAnimSpeed = Mathf.Clamp(walkAnimSpeed, 0, playerSetting.SprintAnimValue);
-
             }
             else if (!isSprinting)
             {
@@ -91,6 +90,10 @@ public class PlayerMovementController : ControllerBase, IMovementController
                     walkSpeed = Mathf.Clamp(walkSpeed, 0, playerSetting.MaxWalkSpeed);
                 }
             }
+
+            // Rotate player.
+            var rotation = Quaternion.Euler(0, Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg, 0);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * playerSetting.RotateSpeed);
         }
         else
         {
@@ -102,11 +105,6 @@ public class PlayerMovementController : ControllerBase, IMovementController
             walkSpeed = Mathf.Clamp(walkSpeed, 0, playerSetting.MaxWalkSpeed);
             movementAudioSource.Stop();
         }
-
-        // Rotate player.
-        var rotation = Quaternion.Euler(0, Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg, 0);
-        transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * playerSetting.RotateSpeed);
-
 
         if (characterController.isGrounded)
         {
