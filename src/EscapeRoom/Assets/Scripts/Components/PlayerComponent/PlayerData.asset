@@ -20,5 +20,5 @@ MonoBehaviour:
   <RotateSpeed>k__BackingField: 10
   <AnimSpeedAccel>k__BackingField: 0.008
   <JumpForce>k__BackingField: 1.5
-  <BreakForce>k__BackingField: 0.2
+  <BreakForce>k__BackingField: 1
   <GravityForce>k__BackingField: -9.81

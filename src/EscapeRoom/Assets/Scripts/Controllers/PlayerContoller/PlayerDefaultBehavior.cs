@@ -5,11 +5,11 @@ using UnityEngine;
 /// <summary>
 /// Standard player behavior controller that handles player other controllers.
 /// </summary>
-public class PlayerDefaultBehaviour : ControllerBase, IBehaviour
+public class PlayerDefaultBehavior : ControllerBase, IBehavior
 {
     private IMovementController movementController;
 
-    public PlayerDefaultBehaviour(IMovementController movementController)
+    public PlayerDefaultBehavior(IMovementController movementController)
     {
         this.movementController = movementController;
     }

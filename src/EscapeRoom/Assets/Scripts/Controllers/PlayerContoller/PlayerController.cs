@@ -14,7 +14,7 @@ public class PlayerController : ControllerBase
     private readonly InputActionReference[] inputActions;
     private readonly CharacterController characterController;
     private readonly PlayerSetting playerSetting;
-    private IBehaviour playerBehavior;
+    private IBehavior playerBehavior;
 
     public PlayerController(
         Transform transform,
@@ -39,7 +39,7 @@ public class PlayerController : ControllerBase
     {
         var movementController = new PlayerMovementController(transform, animator, inputActions, characterController, movementAudioSource, playerSetting);
 
-        playerBehavior = new PlayerDefaultBehaviour(movementController);
+        playerBehavior = new PlayerDefaultBehavior(movementController);
     }
 
     /// <summary>
