@@ -6,4 +6,5 @@ public enum PlayerAnimationEnum
 {
     Idle = 0,
     Jump = 1,
+    Death = 2,
 }

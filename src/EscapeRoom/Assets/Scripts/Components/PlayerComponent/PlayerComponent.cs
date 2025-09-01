@@ -25,23 +25,39 @@ public class PlayerComponent : SceneComponent<PlayerController>
     [Expandable]
     private PlayerSetting playerSetting;
 
+    private const float Rad = 6f;
+    private IEventBusService eventBusService;
     public PlayerController playerController { get; private set; }
 
     protected override PlayerController CreateControllerImpl()
     {
-        playerController = new PlayerController(transform, animator, inputActions, characterController, movementAudioSource, playerSetting);
+        playerController = new PlayerController(transform, animator, inputActions, characterController, movementAudioSource, playerSetting, eventBusService);
+        playerController?.Initialize();
         return playerController;
     }
 
-    private void Awake()
+    public void Initialize(IEventBusService eventBusService)
     {
-        playerController = CreateController();
-        playerController?.Initialize();
+        this.eventBusService = eventBusService;
     }
 
     private void Update()
     {
+        DrawZone();
         playerController?.Update();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        playerController?.OnTriggerEnter(other);
+    }
+
+    private void DrawZone()
+    {
+        Debug.DrawRay(transform.position + Vector3.up * 0.5f, transform.forward * Rad, Color.red);
+        Debug.DrawRay(transform.position + Vector3.up * 0.5f, -transform.forward * Rad, Color.red);
+        Debug.DrawRay(transform.position + Vector3.up * 0.5f, transform.right * Rad, Color.red);
+        Debug.DrawRay(transform.position + Vector3.up * 0.5f, -transform.right * Rad, Color.red);
     }
 
     private void OnDestroy()

@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c89bcafa0a45af74aa2bfecedebdd563, type: 3}
   m_Name: PlayerData
   m_EditorClassIdentifier: 
-  <MaxWalkSpeed>k__BackingField: 1.5
-  <MaxSprintSpeed>k__BackingField: 2.7
+  <MaxWalkSpeed>k__BackingField: 2.4
+  <MaxSprintSpeed>k__BackingField: 3.8
   <WalkAnimValue>k__BackingField: 0.5
-  <SprintAnimValue>k__BackingField: 1
-  <SpeedAccel>k__BackingField: 0.1
+  <SprintAnimValue>k__BackingField: 1.4
+  <SpeedAccel>k__BackingField: 0.6
   <RotateSpeed>k__BackingField: 10
   <AnimSpeedAccel>k__BackingField: 0.008
-  <JumpForce>k__BackingField: 1.5
+  <JumpForce>k__BackingField: 2
   <BreakForce>k__BackingField: 1
   <GravityForce>k__BackingField: -9.81

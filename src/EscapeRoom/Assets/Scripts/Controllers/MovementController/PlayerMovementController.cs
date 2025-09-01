@@ -21,6 +21,8 @@ public class PlayerMovementController : ControllerBase, IMovementController
     private Vector3 cachedDirection;
     private bool isJumping = false;
     private Vector3 playerVelocity = new();
+    private bool isDead = false;
+    private readonly IEventBusService eventBusService;
     private const string VelocityParam = "Velocity";
     private const string StateParam = "State";
 
@@ -30,7 +32,8 @@ public class PlayerMovementController : ControllerBase, IMovementController
         InputActionReference[] inputActions,
         CharacterController characterController,
         AudioSource movementAudioSource,
-        PlayerSetting playerSetting)
+        PlayerSetting playerSetting,
+        IEventBusService eventBusService)
     {
         this.transform = transform;
         this.animator = animator;
@@ -38,6 +41,7 @@ public class PlayerMovementController : ControllerBase, IMovementController
         this.characterController = characterController;
         this.movementAudioSource = movementAudioSource;
         this.playerSetting = playerSetting;
+        this.eventBusService = eventBusService;
     }
 
     /// <summary>
@@ -47,11 +51,15 @@ public class PlayerMovementController : ControllerBase, IMovementController
     {
         movementAudioSource.Stop();
         movementAudioSource.loop = true;
+        eventBusService?.RegisterListener<GameOverParam>(OnGameOver);
     }
 
     ///<inheritdoc />
     public void Move()
     {
+        if (isDead)
+            return;
+
         // Get input direction and jump status.
         isJumping = inputActions[(int)PlayerInputActionEnum.Jump].action.triggered;
 
@@ -60,7 +68,7 @@ public class PlayerMovementController : ControllerBase, IMovementController
         var direction = inputActions[(int)PlayerInputActionEnum.Move].action.ReadValue<Vector2>().normalized;
         moveDirection = new Vector3(direction.x, 0, direction.y);
 
-        if (direction.magnitude > 0)
+        if (direction.magnitude > 0 && !isDead)
         {
             if (isSprinting)
             {
@@ -137,9 +145,16 @@ public class PlayerMovementController : ControllerBase, IMovementController
         animator.SetInteger(StateParam, (int)PlayerAnimationEnum.Jump);
     }
 
+    private void OnGameOver(GameOverParam param)
+    {
+        isDead = true;
+    }
+
     protected override void Dispose(bool disposing)
     {
         characterController.enabled = false;
+        movementAudioSource.Stop();
         Array.Clear(inputActions, 0, inputActions.Length);
+        eventBusService?.UnregisterListener<GameOverParam>(OnGameOver);
     }
 }
