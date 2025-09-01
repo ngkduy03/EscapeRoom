@@ -14,7 +14,9 @@ public class PlayerController : ControllerBase
     private readonly InputActionReference[] inputActions;
     private readonly CharacterController characterController;
     private readonly PlayerSetting playerSetting;
-    private IBehaviour playerBehavior;
+    private readonly IEventBusService eventBusService;
+    private const string StateParam = "State";
+    private IBehavior playerBehavior;
 
     public PlayerController(
         Transform transform,
@@ -22,7 +24,8 @@ public class PlayerController : ControllerBase
         InputActionReference[] inputActions,
         CharacterController characterController,
         AudioSource movementAudioSource,
-        PlayerSetting playerSetting)
+        PlayerSetting playerSetting,
+        IEventBusService eventBusService)
     {
         this.transform = transform;
         this.animator = animator;
@@ -30,6 +33,7 @@ public class PlayerController : ControllerBase
         this.characterController = characterController;
         this.movementAudioSource = movementAudioSource;
         this.playerSetting = playerSetting;
+        this.eventBusService = eventBusService;
     }
 
     /// <summary>
@@ -37,9 +41,10 @@ public class PlayerController : ControllerBase
     /// </summary>
     public void Initialize()
     {
-        var movementController = new PlayerMovementController(transform, animator, inputActions, characterController, movementAudioSource, playerSetting);
+        var movementController = new PlayerMovementController(transform, animator, inputActions, characterController, movementAudioSource, playerSetting, eventBusService);
+        movementController.Initialize();
 
-        playerBehavior = new PlayerDefaultBehaviour(movementController);
+        playerBehavior = new PlayerDefaultBehavior(movementController);
     }
 
     /// <summary>
@@ -48,6 +53,15 @@ public class PlayerController : ControllerBase
     public void Update()
     {
         playerBehavior?.Update();
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent(out EnemyComponent enemy))
+        {
+            eventBusService?.TriggerEvent(new GameOverParam());
+            animator.SetInteger(StateParam, (int)PlayerAnimationEnum.Death);
+        }
     }
 
     protected override void Dispose(bool disposing)
