@@ -5,6 +5,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Unity.AI.Navigation;
 using UnityEngine;
+using Random = UnityEngine.Random;
 using UnityEngine.AI;
 
 /// <summary>
@@ -82,12 +83,12 @@ public class EnemySpawnerController : ControllerBase
         for (int i = 0; i < MaxAttempts; i++)
         {
             // Generate random position within spawn range around player
-            Vector3 randomDirection = UnityEngine.Random.insideUnitSphere;
+            var randomDirection = UnityEngine.Random.insideUnitSphere;
             randomDirection.y = 0;
             randomDirection.Normalize();
 
             // Check if position is on NavMesh
-            Vector3 randomPosition = playerPosition + randomDirection * UnityEngine.Random.Range(limitRange, spawnRange);
+            var randomPosition = playerPosition + randomDirection * Random.Range(limitRange, spawnRange);
             if (NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, 2f, NavMesh.AllAreas))
             {
                 return hit.position;
