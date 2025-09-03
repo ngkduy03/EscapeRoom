@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using NaughtyAttributes;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -22,8 +23,14 @@ public class PlayerComponent : SceneComponent<PlayerController>
     private AudioSource movementAudioSource;
 
     [SerializeField]
+    private AudioSource tabletAudioSource;
+
+    [SerializeField]
     [Expandable]
     private PlayerSetting playerSetting;
+    
+    [SerializeField]
+    private TMP_Text overText;
 
     private const float Rad = 6f;
     private IEventBusService eventBusService;
@@ -31,8 +38,20 @@ public class PlayerComponent : SceneComponent<PlayerController>
 
     protected override PlayerController CreateControllerImpl()
     {
-        playerController = new PlayerController(transform, animator, inputActions, characterController, movementAudioSource, playerSetting, eventBusService);
+        playerController = new PlayerController(
+            transform,
+            animator,
+            inputActions,
+            characterController,
+            movementAudioSource,
+            tabletAudioSource,
+            playerSetting,
+            eventBusService,
+            overText);
+
         playerController?.Initialize();
+        characterController.enabled = false;
+        eventBusService?.RegisterListener<StartGameParam>(OnGameStart);
         return playerController;
     }
 
@@ -43,7 +62,6 @@ public class PlayerComponent : SceneComponent<PlayerController>
 
     private void Update()
     {
-        DrawZone();
         playerController?.Update();
     }
 
@@ -52,16 +70,14 @@ public class PlayerComponent : SceneComponent<PlayerController>
         playerController?.OnTriggerEnter(other);
     }
 
-    private void DrawZone()
+    private void OnGameStart(StartGameParam param)
     {
-        Debug.DrawRay(transform.position + Vector3.up * 0.5f, transform.forward * Rad, Color.red);
-        Debug.DrawRay(transform.position + Vector3.up * 0.5f, -transform.forward * Rad, Color.red);
-        Debug.DrawRay(transform.position + Vector3.up * 0.5f, transform.right * Rad, Color.red);
-        Debug.DrawRay(transform.position + Vector3.up * 0.5f, -transform.right * Rad, Color.red);
+        characterController.enabled = true;
     }
 
     private void OnDestroy()
     {
+        eventBusService?.UnregisterListener<StartGameParam>(OnGameStart);
         playerController?.Dispose();
     }
 }

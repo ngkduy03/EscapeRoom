@@ -46,9 +46,6 @@ public class ChaseController : ControllerBase, IEnemyMovementController
 
     private void OnGameOver(GameOverParam param)
     {
-        agent.speed = 0;
-        agent.angularSpeed = 0;
-        agent.isStopped = true;
         animator.SetInteger(State, (int)EnemyAnimationEnum.Idle);
     }
 

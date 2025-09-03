@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,12 +16,18 @@ public class EnemyComponent : SceneComponent<EnemyController>
     private Animator animator;
 
     private Transform playerTransform;
+    private KeyComponent keyComponent;
     private IEventBusService eventBusService;
     public EnemyController enemyController { get; private set; }
 
     protected override EnemyController CreateControllerImpl()
     {
-        enemyController = new EnemyController(playerTransform, agent, animator, eventBusService);
+        enemyController = new EnemyController(
+            playerTransform,
+            agent,
+            animator,
+            eventBusService,
+            keyComponent);
 
         enemyController?.Initialize();
         return enemyController;
@@ -31,20 +38,27 @@ public class EnemyComponent : SceneComponent<EnemyController>
     /// </summary>
     /// <param name="playerTransform"></param>
     /// <param name="eventBusService"></param>
-    public void Initialize(Transform playerTransform, IEventBusService eventBusService)
+    public void Initialize(
+        Transform playerTransform,
+        IEventBusService eventBusService,
+        KeyComponent keyComponent)
     {
         this.playerTransform = playerTransform;
         this.eventBusService = eventBusService;
-    }
-
-    private void OnEnable()
-    {
-        enemyController = CreateController();
+        this.keyComponent = keyComponent;
     }
 
     private void Update()
     {
         enemyController?.Update();
+    }
+
+    /// <summary>
+    /// Called when the enemy dies.
+    /// </summary>
+    public void OnEnemyDied()
+    {
+        gameObject.SetActive(false);
     }
 
     private void OnDestroy()

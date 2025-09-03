@@ -41,5 +41,6 @@ public class EnemyChasedBehavior : ControllerBase, IBehavior
         cts?.Cancel();
         cts?.Dispose();
         cts = null;
+        movementController?.Dispose();
     }
 }
