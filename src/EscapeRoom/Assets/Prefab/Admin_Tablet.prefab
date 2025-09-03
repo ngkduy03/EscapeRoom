@@ -196,6 +196,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   doorAnimator: {fileID: 0}
+  respawnDuration: 11
 --- !u!65 &4147895115401036628
 BoxCollider:
   m_ObjectHideFlags: 0

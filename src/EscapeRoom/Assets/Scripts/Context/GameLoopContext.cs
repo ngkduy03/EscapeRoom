@@ -15,6 +15,15 @@ public class GameLoopContext : BaseContext<ServiceInitializer>
     [SerializeField]
     private EnemySpawnerComponent enemySpawnerComponent;
     private EnemySpawnerController enemySpawnerController;
+
+    [SerializeField]
+    private KeyComponent keyComponent;
+    private KeyController keyController;
+
+    [SerializeField]
+    private GameCanvasComponent gameCanvasComponent;
+    private GameCanvasController gameCanvasController;
+
     private IEventBusService eventBusService;
     private ILoadSceneService loadSceneService;
 
@@ -27,8 +36,14 @@ public class GameLoopContext : BaseContext<ServiceInitializer>
         playerComponent.Initialize(eventBusService);
         playerController = playerComponent.CreateController();
 
-        enemySpawnerComponent.Initialize(eventBusService);
+        keyComponent.Initialize(eventBusService);
+        keyController = keyComponent.CreateController();
+
+        enemySpawnerComponent.Initialize(eventBusService, keyComponent);
         enemySpawnerController = enemySpawnerComponent.CreateController();
+
+        gameCanvasComponent.Initialize(eventBusService, loadSceneService);
+        gameCanvasController = gameCanvasComponent.CreateController();
     }
 
     /// <inheritdoc />
@@ -36,5 +51,6 @@ public class GameLoopContext : BaseContext<ServiceInitializer>
     {
         playerController?.Dispose();
         enemySpawnerController?.Dispose();
+        keyController?.Dispose();
     }
 }

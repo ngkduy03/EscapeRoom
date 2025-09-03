@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 /// <summary>
 /// Component that represents the key in the scene.
@@ -10,19 +12,34 @@ public class KeyComponent : SceneComponent<KeyController>
 {
     [SerializeField]
     private Animator doorAnimator;
+
+    [SerializeField]
+    private float respawnDuration;
+
+    /// <summary>
+    /// Event triggered when the key is collected.
+    /// </summary>
+    public event Action KeyCollected;
+
     private KeyController keyController;
     private const string State = "State";
     private const int OpenDoorState = 1;
+    private IEventBusService eventBusService;
 
     protected override KeyController CreateControllerImpl()
     {
-        keyController = new KeyController(transform);
+        keyController = new KeyController(transform, respawnDuration);
+        eventBusService?.RegisterListener<StartGameParam>(OnGameStart);
         return keyController;
     }
 
-    private void OnEnable()
+    public void Initialize(IEventBusService eventBusService)
     {
-        keyController = CreateController();
+        this.eventBusService = eventBusService;
+    }
+
+    private void OnGameStart(StartGameParam param)
+    {
         keyController.SwitchPositionPeriodically().Forget();
     }
 
@@ -30,6 +47,8 @@ public class KeyComponent : SceneComponent<KeyController>
     {
         if (other.TryGetComponent(out PlayerComponent player))
         {
+
+            KeyCollected?.Invoke();
             doorAnimator.SetInteger(State, OpenDoorState);
             gameObject.SetActive(false);
             keyController.Dispose();
@@ -38,6 +57,7 @@ public class KeyComponent : SceneComponent<KeyController>
 
     private void OnDestroy()
     {
+        eventBusService?.UnregisterListener<StartGameParam>(OnGameStart);
         keyController?.Dispose();
     }
 }

@@ -78,6 +78,8 @@ public class PlayerMovementController : ControllerBase, IMovementController
 
                 walkSpeed = Mathf.Clamp(walkSpeed, 0, playerSetting.MaxSprintSpeed);
                 walkAnimSpeed = Mathf.Clamp(walkAnimSpeed, 0, playerSetting.SprintAnimValue);
+
+                movementAudioSource.pitch = 1.5f;
             }
             else if (!isSprinting)
             {
@@ -97,11 +99,29 @@ public class PlayerMovementController : ControllerBase, IMovementController
                     walkAnimSpeed = Mathf.Clamp(walkAnimSpeed, 0, playerSetting.WalkAnimValue);
                     walkSpeed = Mathf.Clamp(walkSpeed, 0, playerSetting.MaxWalkSpeed);
                 }
+
+                movementAudioSource.pitch = 1f;
             }
 
             // Rotate player.
             var rotation = Quaternion.Euler(0, Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg, 0);
             transform.rotation = Quaternion.Slerp(transform.rotation, rotation, Time.deltaTime * playerSetting.RotateSpeed);
+
+            // Check if is jumped not play audio.
+            if (characterController.isGrounded)
+            {
+                if (!movementAudioSource.isPlaying)
+                {
+                    movementAudioSource.Play();
+                }
+            }
+            else
+            {
+                if (movementAudioSource.isPlaying)
+                {
+                    movementAudioSource.Stop();
+                }
+            }
         }
         else
         {
@@ -111,12 +131,17 @@ public class PlayerMovementController : ControllerBase, IMovementController
 
             walkAnimSpeed = Mathf.Clamp(walkAnimSpeed, 0, playerSetting.WalkAnimValue);
             walkSpeed = Mathf.Clamp(walkSpeed, 0, playerSetting.MaxWalkSpeed);
-            movementAudioSource.Stop();
+
+            if (movementAudioSource.isPlaying)
+            {
+                movementAudioSource.Stop();
+            }
         }
 
         if (characterController.isGrounded)
         {
             animator.SetInteger(StateParam, (int)PlayerAnimationEnum.Idle);
+
             if (isJumping)
             {
                 // Add jump force.
@@ -136,7 +161,6 @@ public class PlayerMovementController : ControllerBase, IMovementController
         var finalMove = (moveDirection * walkSpeed) + (playerVelocity.y * Vector3.up);
         characterController.Move(finalMove * Time.deltaTime);
         animator.SetFloat(VelocityParam, walkAnimSpeed);
-        movementAudioSource.Play();
     }
 
     private void JumpMomentum()
@@ -148,6 +172,10 @@ public class PlayerMovementController : ControllerBase, IMovementController
     private void OnGameOver(GameOverParam param)
     {
         isDead = true;
+        if (movementAudioSource.isPlaying)
+        {
+            movementAudioSource.Stop();
+        }
     }
 
     protected override void Dispose(bool disposing)

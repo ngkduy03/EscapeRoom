@@ -17,11 +17,15 @@ public class KeyController : ControllerBase
     private const float MaxRadius = 20f;
     private const float MinRadius = 10f;
     private const float YOffset = 0.55f;
+    private float respawnDuration;
     private CancellationTokenSource cts = new();
 
-    public KeyController(Transform keyTransform)
+    public KeyController(
+        Transform keyTransform,
+        float respawnDuration)
     {
         this.keyTransform = keyTransform;
+        this.respawnDuration = respawnDuration;
     }
 
     /// <summary>
@@ -34,7 +38,7 @@ public class KeyController : ControllerBase
         {
             try
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(10), cancellationToken: cts.Token);
+                await UniTask.Delay(TimeSpan.FromSeconds(respawnDuration), cancellationToken: cts.Token);
                 Vector3 newPosition = FindRandomNavMeshPosition();
 
                 if (newPosition != Vector3.zero)
@@ -85,6 +89,5 @@ public class KeyController : ControllerBase
             cts?.Cancel();
             cts?.Dispose();
         }
-        base.Dispose(disposing);
     }
 }

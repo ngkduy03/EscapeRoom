@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.AI.Navigation;
@@ -17,6 +18,7 @@ public class EnemySpawnerComponent : SceneComponent<EnemySpawnerController>
     [SerializeField]
     private NavMeshSurface navMeshSurface;
 
+    private KeyComponent keyComponent;
     private IEventBusService eventBusService;
     private EnemySpawnerController enemySpawnerController;
 
@@ -26,18 +28,28 @@ public class EnemySpawnerComponent : SceneComponent<EnemySpawnerController>
             enemyComponent,
             playerComponent,
             navMeshSurface,
-            eventBusService
+            eventBusService,
+            keyComponent
         );
+
+        eventBusService?.RegisterListener<StartGameParam>(OnGameStart);
         return enemySpawnerController;
     }
 
-    public void Initialize(IEventBusService eventBusService)
+    public void Initialize(IEventBusService eventBusService, KeyComponent keyComponent)
     {
         this.eventBusService = eventBusService;
+        this.keyComponent = keyComponent;
     }
 
-    private void Start()
+    private void OnGameStart(StartGameParam param)
     {
         enemySpawnerController.StartContinuousSpawning();
+    }
+
+    private void OnDestroy()
+    {
+        eventBusService?.UnregisterListener<StartGameParam>(OnGameStart);
+        enemySpawnerController?.Dispose();
     }
 }

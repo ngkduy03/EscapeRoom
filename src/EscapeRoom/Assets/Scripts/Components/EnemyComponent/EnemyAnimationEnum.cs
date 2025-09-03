@@ -4,4 +4,5 @@
 public enum EnemyAnimationEnum
 {
     Idle = 1,
+    Death = 2,
 }
